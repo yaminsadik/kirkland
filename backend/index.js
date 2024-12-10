@@ -1,18 +1,34 @@
-import express from "express";
-import dotenv from "dotenv";
-import { connectDB } from "./config/db.js";
+import app from './app.js';
+import connectDatabase from '../backend/config/db.js';
+import { config as dotenvConfig } from 'dotenv';
+import cloudinary from 'cloudinary';
 
-dotenv.config();
+// config
+if (process.env.NODE_ENV !== 'PRODUCTION') {
+  dotenvConfig({ path: '../.env' });
+}
 
-const app = express();
-const PORT = 3000; // set port at .env file when production ready
+// connect to db
+connectDatabase();
 
-// Test route to verify server is working
-app.get("/", (req, res) => {
-	res.send("Express server is working!");
-  });
-
-app.listen(PORT, () => {
-	connectDB();
-	console.log(`Server started at http://localhost:" + ${PORT}`);
+cloudinary.v2.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+
+const server = app.listen(process.env.PORT, () => {
+  console.log(`Server is running on http://localhost:${process.env.PORT}`);
+});
+
+// unhandled promise rejection
+process.on('unhandledRejection', (err) => {
+  console.log(`Shutting down server for ${err.message}`);
+  console.log('Shutting down the server for unhandled promise rejection');
+
+  server.close(() => {
+    process.exit(1);
+  });
+});
+
+export default server;

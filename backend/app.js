@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser"; //helps parse cookies sent by the clie
 import bodyParser from "body-parser"; //processes incoming request data
 import cors from "cors"; //enables the server to handle request from other origins, if front-end hosted on a different domain
 import helmet from "helmet"; //adds security related http headers to protect the app from common vulnerabilities
+import dotenv from 'dotenv';
 
 //Importing Routes
 import listing from "./controllers/listing.js";
@@ -41,7 +42,7 @@ app.get("/", (req, res) => {
 
 //configure environment variable
 if (process.env.NODE_ENV !== "PRODUCTION") {
-  require("dotenv").config({
+  dotenv.config({
     path: "../.env",
   });
 }
