@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 //Cross-Origin Requests
 app.use(
   cors({
-    origin: "https://chireva-rentals.vercel.app",
+    origin: "http://localhost:3001/",
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
   })
